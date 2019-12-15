@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body class="blue accent-1" style="font-family: 'Bangers', 'Times New Roman', Times, serif;">
+    
+    
+        <!--navbar , sidenav-->
+        <nav class="blue">
+            <div class="nav-wrapper">
+              <a href="#" class="brand-logo">Descubre Personas</a>
+              <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+              <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li><a href="conocenos.html">Conocenos</a></li>
+              </ul>
+            </div>
+        </nav>
+
+       
+       <div id="app">
+
+
+           <div class="row">
+               <div class="col l4">
+                   <div class="card-panel center">
+                       
+                       <br>
+                       <h5>Click abajo para buscar personas en España</h5>
+                       <img src="img/CLICK AQUI.png" width="100" height="100" class="responsive-img">
+                       <br>
+                       <button onclick="location.href='index.html'" class="btn" style="font-family: 'Bangers', 'Times New Roman', Times, serif;">España</button>
+                       <br>
+                       <h5>Click abajo para buscar personas en Canada</h5>
+                       <img src="img/CLICK AQUI.png" width="100" height="100" class="responsive-img">
+                       <br>
+                       <button onclick="location.href='canada.html'" class="btn" style="font-family: 'Bangers', 'Times New Roman', Times, serif;">Canada</button>
+                   </div>     
+                   
+               </div>
+
+               <div class="col l4">
+                   <div class="card-panel center">
+                    <img src="img/brasil.png" width="50" height="50" class="responsive-img">
+                        <ul>
+                     <li v-for="item in users">
+                     <img :src="item.picture.large">
+                     <h3>{{item.name.first}}</h3>
+                     <h4>{{item.location.country}}</h4>
+                     <button @click="ver_modal(item)" class="btn-floating">
+                        <i class="material-icons">search</i>
+                     </button>
+                     <hr>
+                        </li>
+                        </ul>
+                    
+                   </div>
+               </div>
+               <div class="col l4">
+                <div class="card-panel l4 center">
+                    <p class="left-align">Publicidad</p>
+                    <img src="img/publicidad2.gif" width="300" height="300" class="responsive-img">
+                    <p class="blue-text">Anuncios Publicitame</p>
+                    <p>¿Quieres publicitar tu empresa? Contactanos con nosotros dandole clic al anuncio!!</p>
+                </div>
+            </div>
+           </div>
+
+               <div id="modal1" class="modal blue accent-1" style="font-family: 'Bangers', 'Times New Roman', Times, serif;">
+                <div v-if="usuario !=null">
+                    <div class="modal-content">
+                     <img :src="usuario.picture.large" class="circle">
+                      <h4>{{usuario.name.first}} {{usuario.name.last}}</h4>
+                      <h5>Sexo : {{usuario.gender}}</h5>
+                      <h5>Edad : {{usuario.dob.age}}</h5>
+                      <h5>Ciudad : {{usuario.location.city}}</h5>
+                      <h5>Email: {{usuario.email}}</h5>
+                    </div>
+                    <div class="modal-footer blue accent-1">
+                      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Salir</a>
+                    </div>
+                    </div>
+                  </div>
+
+                  
+           </div>
+
+           <footer class="page-footer blue">
+            <div class="container">
+              <div class="row">
+                <div class="col l6 s12">
+                  <h5 class="white-text">Descrubir Personas</h5>
+                  <p class="grey-text text-lighten-4">Para mas informacion sobre nuestros proximos trabajos llamar al numero de abajo o visitarnos en nuestra sede</p>
+                  <i class="material-icons left">thumb_up</i>
+                  <p>Facebook : Descubre Personas</p>
+                  <i class="material-icons left">favorite</i>
+                  <p>Instagram : Descubre_Personas</p>
+                  <i class="material-icons left">video_library</i>
+                  <p>Youtube : Proximamente</p>
+                  <i class="material-icons left">location_on</i>
+                  <p>San Javier de Loncomilla</p>
+                  <i class="material-icons left">call</i>
+                  <p>+56981796990</p>
+                </div>
+              </div>
+            </div>
+            <div class="footer-copyright">
+              <div class="container">
+              2019 Cristian-Simon
+             
+              </div>
+            </div>
+          </footer>
+
+           
+
+                 
+
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+   <script>
+    
+   new Vue({
+       el:'#app',
+       data:{
+         
+           users:[],
+           
+           url:'https://randomuser.me/api/?results=3&nat=br',
+           usuario:null
+       },
+       methods:{
+        async cargar(){
+            var resultado = await axios.get(this.url);
+            this.users = resultado.data.results;
+            console.log(resultado.data);
+        },
+        ver_modal(item){
+               this.usuario = item;
+               var instance = M.Modal.getInstance(document.getElementById('modal1'));
+               instance.open();
+           }
+       },
+       created(){
+           this.cargar();
+       },
+       mounted(){
+        document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+  });
+  document.addEventListener('DOMContentLoaded', function() {
+    var sidenav = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(sidenav);
+  });
+       }
+       
+   }); 
+
+   </script>
+
+    
+</body>
+</html>
